@@ -7,7 +7,6 @@ import 'package:wikisearchapp/wiki_model/wikiservice.dart';
 import 'diff_services/nextPage.dart';
 import 'diff_services/searchListGenerate.dart';
 
-
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
 
@@ -35,129 +34,123 @@ class _SearchPageState extends State<SearchPage> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          automaticallyImplyLeading: false,
-          textTheme: Theme.of(context).textTheme,
-          toolbarHeight: 175.0,
-          elevation: 0.0,
-          bottom: PreferredSize(
-            child: Column(
-              children: [
-                ListTile(
-                  leading: InkWell(
-                    child: SvgPicture.asset('assets/images/Back.svg'),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  title: Text(
-                    "Search...",
-                    style: TextStyle(
-                      fontSize: 30.0,
-                      color: Color(0xff5E56E7),
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w600,
-                    ),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        textTheme: Theme.of(context).textTheme,
+        toolbarHeight: 175.0,
+        elevation: 0.0,
+        bottom: PreferredSize(
+          child: Column(
+            children: [
+              ListTile(
+                leading: InkWell(
+                  child: SvgPicture.asset('assets/images/Back.svg'),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                title: Text(
+                  "Search...",
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    color: Color(0xff5E56E7),
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: TextField(
-                    textInputAction: TextInputAction.search,
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Search',
-                      hintStyle: TextStyle(
-                        color: Color(0xFFA0A0A0),
-                      ),
-                      border: OutlineInputBorder(borderSide: BorderSide.none),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Theme.of(context).accentColor),
-                      ),
-                      filled: true,
-                      fillColor: Color(0xFFF0F0F6),
-                      focusColor: Color(0xFFF0F0F6),
-                      prefixIcon: Hero(
-                        tag: 'search',
-                        child: SvgPicture.asset(
-                          'assets/images/Search.svg',
-                          fit: BoxFit.none,
-                        ),
-                      ),
-                      suffixIcon: query.isNotEmpty
-                          ? InkWell(
-                              child: SvgPicture.asset(
-                                'assets/images/Cancel.svg',
-                                fit: BoxFit.none,
-                              ),
-                              onTap: () {
-                                _searchController.clear();
-                                setState(() {
-                                  query = '';
-                                });
-                                // searchBooks();
-                              },
-                            )
-                          : null,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextField(
+                  textInputAction: TextInputAction.search,
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    hintStyle: TextStyle(
+                      color: Color(0xFFA0A0A0),
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        // results.clear();
-                        query = '';
-                        query = value;
-                      });
-                      query.isEmpty ? print('Empty') : searchWiki(query);
-                      // query.isEmpty ? print('Empty') : print(query);
-                    },
-                    onSubmitted: (value) {
-                      setState(() {
-                        // results.clear();
-                        query = value;
-                      });
-                      query.isEmpty ? print('Empty') : searchWiki(query);
-                      // query.isEmpty ? print('Empty') : print(query);
-                    },
+                    border: OutlineInputBorder(borderSide: BorderSide.none),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Theme.of(context).accentColor),
+                    ),
+                    filled: true,
+                    fillColor: Color(0xFFF0F0F6),
+                    focusColor: Color(0xFFF0F0F6),
+                    prefixIcon: Hero(
+                      tag: 'search',
+                      child: SvgPicture.asset(
+                        'assets/images/Search.svg',
+                        fit: BoxFit.none,
+                      ),
+                    ),
+                    suffixIcon: query.isNotEmpty
+                        ? InkWell(
+                            child: SvgPicture.asset(
+                              'assets/images/Cancel.svg',
+                              fit: BoxFit.none,
+                            ),
+                            onTap: () {
+                              _searchController.clear();
+                              setState(() {
+                                query = '';
+                              });
+                              // searchBooks();
+                            },
+                          )
+                        : null,
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      // results.clear();
+                      query = '';
+                      query = value;
+                    });
+                    query.isEmpty ? print('Empty') : searchWiki(query);
+                    // query.isEmpty ? print('Empty') : print(query);
+                  },
+                  onSubmitted: (value) {
+                    setState(() {
+                      // results.clear();
+                      query = value;
+                    });
+                    query.isEmpty ? print('Empty') : searchWiki(query);
+                    // query.isEmpty ? print('Empty') : print(query);
+                  },
                 ),
-              ],
-            ),
-            preferredSize: Size.fromHeight(175),
+              ),
+            ],
           ),
+          preferredSize: Size.fromHeight(175),
         ),
-        body: SingleChildScrollView(
-          child: Container(
+      ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
             height: height * 0.7,
             child: query.isNotEmpty
                 ? results.query != null
                     ? ListView.builder(
+                        shrinkWrap: true,
                         itemCount: results.query!.pages!.length,
                         itemBuilder: (context, index) {
                           return Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(10),
                             child: Card(
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              elevation: 5,
-                              // color: DynamicColor().getColor(1.0),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
                                 child: ListTile(
-                                  onLongPress: () {
-                                    HapticFeedback.heavyImpact();
-                                    share(
-                                        context,
-                                        searchResultData!
-                                            .pages![index].extract!,
-                                        searchResultData.pages![index].url);
-                                  },
                                   onTap: () {
                                     launchURL(
-                                        searchResultData!.pages![index].url);
+                                      searchResultData!.pages![index].url,
+                                    );
                                   },
                                   tileColor: Colors.white,
-                                  contentPadding: EdgeInsets.all(8.0),
+                                  contentPadding: EdgeInsets.all(12),
                                   leading: searchResultData!
                                               .pages![index].thumbnail !=
                                           null
@@ -169,13 +162,8 @@ class _SearchPageState extends State<SearchPage> {
                                                   .source,
                                             )
                                           : Image.asset(
-                                              "assets/images/wiki.png")
-                                      : Image.asset(
-                                          "assets/images/wiki.png",
-                                          scale: 8,
-                                          height: 80,
-                                          width: 80,
-                                        ),
+                                              'assets/images/wiki.png')
+                                      : Image.asset('assets/images/wiki.png'),
                                   subtitle: Text(
                                     searchResultData.pages![index].terms != null
                                         ? searchResultData.pages![index].terms!
@@ -193,30 +181,24 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                           );
                         })
-                    : Center(child: CircularProgressIndicator())
-                : Column(
-                    children: <Widget>[
-                      SizedBox(height: 40.0),
-                      Container(
-                        height: 300,
-                        child: Image(
-                          image: AssetImage("assets/images/welcome.webp"),
-                          fit: BoxFit.contain,
+                    : Center(
+                        child: CircularProgressIndicator(),
+                      )
+                : Center(
+                    child: Container(
+                        child: Column(
+                      children: [
+                        Image.asset(
+                          'assets/images/wikipedia.png',
+                          width: 200,
+                          height: 200,
                         ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(15),
-                        child: Text(
-                          "No Books Found",
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Montserrat'),
-                        ),
-                      ),
-                    ],
-                  ),
-          ),
-        ));
+                        Text('not found'),
+                      ],
+                    )),
+                  )),
+      ),
+
+    );
   }
 }
